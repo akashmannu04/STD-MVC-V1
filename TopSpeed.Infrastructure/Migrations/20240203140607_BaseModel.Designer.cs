@@ -5,15 +5,15 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using TopSpeed.Web.Data;
+using TopSpeed.Infrastructure.Common;
 
 #nullable disable
 
-namespace TopSpeed.Web.Migrations
+namespace TopSpeed.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240128111152_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20240203140607_BaseModel")]
+    partial class BaseModel
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace TopSpeed.Web.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("TopSpeed.Web.Models.Brand", b =>
+            modelBuilder.Entity("TopSpeed.Domain.Models.Brandv2", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -34,8 +34,20 @@ namespace TopSpeed.Web.Migrations
                     b.Property<string>("BrandLogo")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("EstablishedYear")
                         .HasColumnType("int");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ModifiedOn")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -43,7 +55,7 @@ namespace TopSpeed.Web.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Brand");
+                    b.ToTable("Brandv2");
                 });
 #pragma warning restore 612, 618
         }

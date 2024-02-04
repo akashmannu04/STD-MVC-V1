@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using TopSpeed.Web.Data;
-using TopSpeed.Web.Models;
+using TopSpeed.Application.ApplicationConstant;
+using TopSpeed.Domain.Models;
+using TopSpeed.Infrastructure.Common;
 
 namespace TopSpeed.Web.Controllers
 {
@@ -46,7 +47,7 @@ namespace TopSpeed.Web.Controllers
             {
                 _dbContext.Brandv2.Add(brandv2);
                 _dbContext.SaveChanges();
-                TempData["success"] = "Record created successfully";
+                TempData["success"] = CommonMessage.RecordCreated;
                 return RedirectToAction(nameof(Index));
             }
             return View();
@@ -108,7 +109,7 @@ namespace TopSpeed.Web.Controllers
                 _dbContext.Brandv2.Update(objFromDb); 
                 _dbContext.SaveChanges();
 
-                TempData["warning"] = "Record updated successfully";
+                TempData["warning"] = CommonMessage.RecordUpdated;
                 return RedirectToAction(nameof(Index));
             }
             return View();
@@ -121,7 +122,7 @@ namespace TopSpeed.Web.Controllers
         [HttpPost]
         public IActionResult Delete(Brandv2 brandv2) {
             string webRootPath=_webHostEnivironment.WebRootPath;
-            if (string.IsNullOrEmpty(brandv2.BrandLogo))
+            if (!string.IsNullOrEmpty(brandv2.BrandLogo))
             {
                 var objFromDb=_dbContext.Brandv2.AsNoTracking().FirstOrDefault(x=>x.Id== brandv2.Id);
                 if(objFromDb!=null)
@@ -135,6 +136,7 @@ namespace TopSpeed.Web.Controllers
             }
             _dbContext.Brandv2.Remove(brandv2);
             _dbContext.SaveChanges();
+            TempData["error"] = CommonMessage.RecordDeleted;
             return RedirectToAction(nameof(Index));
         }
     }

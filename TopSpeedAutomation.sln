@@ -3,7 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34511.84
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TopSpeed.Web", "TopSpeed.Web\TopSpeed.Web.csproj", "{8839F198-1AB7-4CE3-B270-3D4ABE24C0E8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TopSpeed.Web", "TopSpeed.Web\TopSpeed.Web.csproj", "{8839F198-1AB7-4CE3-B270-3D4ABE24C0E8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TopSpeed.Application", "TopSpeed.Application\TopSpeed.Application.csproj", "{99732579-63A0-460B-94D6-E3251B747913}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TopSpeed.Domain", "TopSpeed.Domain\TopSpeed.Domain.csproj", "{90F2B27A-297A-4841-8202-276971D7A0F5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TopSpeed.Infrastructure", "TopSpeed.Infrastructure\TopSpeed.Infrastructure.csproj", "{8D1E9911-E79B-4910-870C-8CDE5CE5694C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +21,18 @@ Global
 		{8839F198-1AB7-4CE3-B270-3D4ABE24C0E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8839F198-1AB7-4CE3-B270-3D4ABE24C0E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8839F198-1AB7-4CE3-B270-3D4ABE24C0E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{99732579-63A0-460B-94D6-E3251B747913}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99732579-63A0-460B-94D6-E3251B747913}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99732579-63A0-460B-94D6-E3251B747913}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99732579-63A0-460B-94D6-E3251B747913}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90F2B27A-297A-4841-8202-276971D7A0F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90F2B27A-297A-4841-8202-276971D7A0F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90F2B27A-297A-4841-8202-276971D7A0F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90F2B27A-297A-4841-8202-276971D7A0F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D1E9911-E79B-4910-870C-8CDE5CE5694C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D1E9911-E79B-4910-870C-8CDE5CE5694C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D1E9911-E79B-4910-870C-8CDE5CE5694C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D1E9911-E79B-4910-870C-8CDE5CE5694C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

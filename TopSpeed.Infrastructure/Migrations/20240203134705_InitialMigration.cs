@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace TopSpeed.Web.Migrations
+namespace TopSpeed.Infrastructure.Migrations
 {
     /// <inheritdoc />
     public partial class InitialMigration : Migration
