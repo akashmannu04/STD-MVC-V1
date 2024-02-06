@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TopSpeed.Application.ApplicationConstant;
+using TopSpeed.Application.Contracts.Presistence;
 using TopSpeed.Domain.Models;
 using TopSpeed.Infrastructure.Common;
 
@@ -8,17 +9,17 @@ namespace TopSpeed.Web.Controllers
 {
     public class BrandController : Controller
     {
-        private readonly ApplicationDbContext _dbContext;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IWebHostEnvironment _webHostEnivironment;// Adding one interface for root path
-        public BrandController(ApplicationDbContext dbContext, IWebHostEnvironment webHostEnivironment) //Injected in constructor as well
+        public BrandController(IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnivironment) //Injected in constructor as well
         {
-            _dbContext = dbContext;
+            _unitOfWork = unitOfWork;
             _webHostEnivironment = webHostEnivironment;// It handles. when we are submitting images
         }
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            List<Brandv2> brands=_dbContext.Brandv2.ToList(); //Adding our collection list to DB
+            List<Brandv2> brands = await _unitOfWork.Brandv2.GetAllAsync(); //Adding our collection list to DB
             return View(brands);
         }
         [HttpGet]
@@ -27,7 +28,7 @@ namespace TopSpeed.Web.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Create(Brandv2 brandv2)
+        public async Task<IActionResult> Create(Brandv2 brandv2)
         {
             string webRootPath = _webHostEnivironment.WebRootPath; //It helps to access the path
             var file = HttpContext.Request.Form.Files;//It helps to get image request through form
@@ -45,29 +46,29 @@ namespace TopSpeed.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                _dbContext.Brandv2.Add(brandv2);
-                _dbContext.SaveChanges();
+                await _unitOfWork.Brandv2.Create(brandv2);
+                await _unitOfWork.SaveAsSync();
                 TempData["success"] = CommonMessage.RecordCreated;
                 return RedirectToAction(nameof(Index));
             }
             return View();
         }
         [HttpGet]
-        public IActionResult Details(Guid id)
+        public async Task<IActionResult> Details(Guid id)
         {
-            Brandv2 brandv2 = _dbContext.Brandv2.FirstOrDefault(x => x.Id == id);//It compares Db ID value and Brand ID value.
+            Brandv2 brandv2 = await _unitOfWork.Brandv2.GetByIdAsync(id);//It compares Db ID value and Brand ID value.
                                                                                  //If matches the both value.
                                                                                  //It will fetch the details to user 
             return View(brandv2);
         }
         [HttpGet]
-        public IActionResult Edit(Guid id)
+        public async Task<IActionResult> Edit(Guid id)
         {
-            Brandv2 brandv2 = _dbContext.Brandv2.FirstOrDefault(x => x.Id == id);
+            Brandv2 brandv2 = await _unitOfWork.Brandv2.GetByIdAsync(id);
             return View(brandv2);
         }
         [HttpPost]
-        public IActionResult Edit(Brandv2 brandv2)
+        public async Task<IActionResult> Edit(Brandv2 brandv2)
         {
             string webRootPath = _webHostEnivironment.WebRootPath; //It helps to access the path
             var file = HttpContext.Request.Form.Files;//It helps to get image request through form
@@ -77,7 +78,7 @@ namespace TopSpeed.Web.Controllers
                 var upload = Path.Combine(webRootPath, @"images\brand");//It is used to specify the path to upload a file
                 var extension = Path.GetExtension(file[0].FileName);//It is used to get file extension
                 //delete old image
-                var objFromDb=_dbContext.Brandv2.AsNoTracking().FirstOrDefault(x=>x.Id==brandv2.Id);//It is used to find brand details and we are taking object from DB
+                var objFromDb = await _unitOfWork.Brandv2.GetByIdAsync(brandv2.Id);//It is used to find brand details and we are taking object from DB
                 //AsNoTracking() -> It is used to avoid clash. Because we are taking image from EF core and delete the image. Similar time we are updating the same object 
                 if(objFromDb != null) 
                 {
@@ -98,33 +99,24 @@ namespace TopSpeed.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                var objFromDb = _dbContext.Brandv2.AsNoTracking().FirstOrDefault(x => x.Id == brandv2.Id);
-                objFromDb.Name=brandv2.Name;
-                objFromDb.EstablishedYear=brandv2.EstablishedYear;
-                if(brandv2.BrandLogo!=null)
-                {
-                    objFromDb.BrandLogo = brandv2.BrandLogo;
-                }
-
-                _dbContext.Brandv2.Update(objFromDb); 
-                _dbContext.SaveChanges();
-
+               await _unitOfWork.Brandv2.Update(brandv2);
+                await _unitOfWork.SaveAsSync();
                 TempData["warning"] = CommonMessage.RecordUpdated;
                 return RedirectToAction(nameof(Index));
             }
             return View();
         }
-        public IActionResult Delete(Guid id)
+        public async Task<IActionResult> Delete(Guid id)
         {
-            Brandv2 brandv2 = _dbContext.Brandv2.FirstOrDefault(x => x.Id == id);
+            Brandv2 brandv2 =await _unitOfWork.Brandv2.GetByIdAsync(id);
             return View(brandv2);
         }
         [HttpPost]
-        public IActionResult Delete(Brandv2 brandv2) {
+        public async Task<IActionResult> Delete(Brandv2 brandv2) {
             string webRootPath=_webHostEnivironment.WebRootPath;
             if (!string.IsNullOrEmpty(brandv2.BrandLogo))
             {
-                var objFromDb=_dbContext.Brandv2.AsNoTracking().FirstOrDefault(x=>x.Id== brandv2.Id);
+                var objFromDb=_unitOfWork.Brandv2.GetByIdAsync(brandv2.Id);
                 if(objFromDb!=null)
                 {
                     var oldImagePath=Path.Combine(webRootPath, brandv2.BrandLogo.Trim('\\'));
@@ -134,8 +126,8 @@ namespace TopSpeed.Web.Controllers
                     }
                 }
             }
-            _dbContext.Brandv2.Remove(brandv2);
-            _dbContext.SaveChanges();
+            await _unitOfWork.Brandv2.Delete(brandv2);
+            await _unitOfWork.SaveAsSync();
             TempData["error"] = CommonMessage.RecordDeleted;
             return RedirectToAction(nameof(Index));
         }

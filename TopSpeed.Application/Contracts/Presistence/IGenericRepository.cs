@@ -14,17 +14,17 @@ namespace TopSpeed.Application.Contracts.Presistence
 
         Task Delete(T entity);
 
-        Task<List<T>> Get(Expression<Func<T, bool>> predicate);
+        Task<List<T>> Get(Expression<Func<T,bool>> predicate);
 
         Task<List<T>> GetAllAsync();
 
-        IEnumerable<T> Query(Expression<Func<T, bool>> predicate);
+        IEnumerable<T> Query(Expression<Func<T,bool>> predicate);
 
         IEnumerable<T> Query();
 
         Task<T> GetByIdAsync(Guid id);
 
-        Task<bool> IsRecordExists(Expression<Func<T, bool>> predicate);
+        Task<bool> IsRecordExists(Expression<Func<T,bool>> predicate);
 
 
     }
