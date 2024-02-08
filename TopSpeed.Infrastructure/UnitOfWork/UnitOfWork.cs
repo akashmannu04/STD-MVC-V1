@@ -16,8 +16,11 @@ namespace TopSpeed.Infrastructure.UnitOfWork
         {
             _dbContext = dbContext;
             Brandv2 = new BrandRepository(_dbContext);
+            VechicleType=new VechicleTypeRepository(_dbContext);
         }
         public IBrandRepository Brandv2 {  get; private set; }
+
+        public IVechicleRepository VechicleType { get; private set; }
 
         public void Dispose()
         {
